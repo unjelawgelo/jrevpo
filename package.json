@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "preinstall": "echo 'Running preinstall script' && npm install --legacy-peer-deps || true",
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",

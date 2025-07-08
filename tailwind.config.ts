@@ -99,10 +99,7 @@ const config: Config = {
           to: { height: "0" },
         },
       },
-      fontFamily: {
-        sans: ["Inter", "Arial", "sans-serif"],
-        display: ["Poppins", "sans-serif"],
-      },
+
       spacing: {
         "18": "4.5rem",
         "88": "22rem",

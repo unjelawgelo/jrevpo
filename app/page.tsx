@@ -1585,37 +1585,29 @@ export default function Page() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
   const [assessmentOpen, setAssessmentOpen] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
-
-  // Handle video playback control
-  useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-
-    const handleTimeUpdate = () => {
-      if (video.currentTime >= 233) { // 3 minutes and 53 seconds = 233 seconds
-        video.currentTime = 0
-        video.play().catch(e => console.error('Video play error:', e))
-      }
-    }
-
-    video.addEventListener('timeupdate', handleTimeUpdate)
-    
-    // Cleanup
-    return () => {
-      video.removeEventListener('timeupdate', handleTimeUpdate)
-    }
-  }, [])
-
-  const scrollToMinistries = () => {
-    document.getElementById("ministries")?.scrollIntoView({ behavior: "smooth" })
-  }
-
-  const scrollToJoin = () => {
-    document.getElementById("join-us")?.scrollIntoView({ behavior: "smooth" })
-  }
-
   const [showBackToTop, setShowBackToTop] = useState(false)
   const [ministriesDropdownOpen, setMinistriesDropdownOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('home')
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Add click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setMinistriesDropdownOpen(false);
+      }
+    };
+
+    // Add event listener when dropdown is open
+    if (ministriesDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    // Clean up
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ministriesDropdownOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -1624,23 +1616,29 @@ export default function Page() {
       const winHeight = window.innerHeight
       const scrollPercent = scrollTop / (docHeight - winHeight)
 
-      // Show back to top button when user is 90% down the page (very near footer)
       setShowBackToTop(scrollPercent > 0.9)
-    }
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element
-      if (!target.closest(".ministries-dropdown")) {
-        setMinistriesDropdownOpen(false)
+      
+      const sections = ['home', 'about', 'ministries', 'ministry-assessment', 'join-us']
+      const scrollPosition = window.scrollY + 100 // Add offset for fixed header
+      
+      for (const section of sections) {
+        const element = document.getElementById(section)
+        if (element) {
+          const offsetTop = element.offsetTop
+          const offsetHeight = element.offsetHeight
+          
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section)
+            break
+          }
+        }
       }
     }
 
     window.addEventListener("scroll", handleScroll)
-    document.addEventListener("click", handleClickOutside)
 
     return () => {
       window.removeEventListener("scroll", handleScroll)
-      document.removeEventListener("click", handleClickOutside)
     }
   }, [])
 
@@ -1663,10 +1661,15 @@ export default function Page() {
     setMinistriesDropdownOpen(false);
   };
   
-  // Handle navigation clicks with smooth scroll
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    smoothScrollTo(id);
+  const scrollToMinistries = () => {
+    setActiveSection('ministries');
+    document.getElementById('ministries')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, section: string) => {
+    e.preventDefault()
+    setActiveSection(section)
+    document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })
   };
 
   return (
@@ -1680,8 +1683,19 @@ export default function Page() {
       >
         <div className="container mx-auto px-6 sm:px-8 lg:px-12">
           <div className="flex justify-between items-center h-16">
-            <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
-              <span className="font-bold text-2xl text-black">JRev</span>
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="flex items-center"
+            >
+              <Link 
+                href="#home" 
+                onClick={(e) => handleNavClick(e, 'home')}
+                className="font-bold text-2xl text-black hover:opacity-80 transition-opacity"
+              >
+                JRev
+              </Link>
             </motion.div>
 
             {/* Navigation - Always visible */}
@@ -1689,7 +1703,7 @@ export default function Page() {
               <a
                 href="#home"
                 onClick={(e) => handleNavClick(e, 'home')}
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-sm sm:text-base cursor-pointer"
+                className={`${activeSection === 'home' ? 'text-purple-600' : 'text-gray-700'} hover:text-purple-600 transition-colors font-medium text-sm sm:text-base cursor-pointer`}
               >
                 Home
               </a>
@@ -1697,16 +1711,16 @@ export default function Page() {
               <a
                 href="#about"
                 onClick={(e) => handleNavClick(e, 'about')}
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-sm sm:text-base cursor-pointer"
+                className={`${activeSection === 'about' ? 'text-purple-600' : 'text-gray-700'} hover:text-purple-600 transition-colors font-medium text-sm sm:text-base cursor-pointer`}
               >
                 About
               </a>
 
               {/* Ministries Dropdown */}
-              <div className="relative ministries-dropdown">
+              <div className="relative ministries-dropdown" ref={dropdownRef}>
                 <button
                   onClick={() => setMinistriesDropdownOpen(!ministriesDropdownOpen)}
-                  className="text-gray-700 hover:text-purple-600 transition-colors font-medium flex items-center text-sm sm:text-base"
+                  className={`flex items-center space-x-1 ${activeSection.startsWith('ministry-') || activeSection === 'ministries' ? 'text-purple-600' : 'text-gray-700'} hover:text-purple-600 transition-colors font-medium text-sm sm:text-base`}
                 >
                   Ministries
                   <ChevronDown
@@ -1745,7 +1759,7 @@ export default function Page() {
 
               <Button
                 onClick={() => document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" })}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full px-4 sm:px-3 lg:px-4 text-sm sm:text-base py-2"
+                className="hidden sm:flex bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full px-4 sm:px-3 lg:px-4 text-sm sm:text-base py-2"
               >
                 Visit Us
               </Button>
@@ -2298,7 +2312,7 @@ export default function Page() {
                     e.preventDefault();
                     smoothScrollTo('ministries');
                   }}
-                  className="w-full px-8 py-4 text-lg font-semibold text-center text-indigo-600 bg-white rounded-full hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="w-full px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-center text-indigo-600 bg-white rounded-full hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   View All Ministries
                 </button>
@@ -2312,7 +2326,7 @@ export default function Page() {
                     e.preventDefault();
                     smoothScrollTo('ministry-assessment');
                   }}
-                  className="w-full px-8 py-4 text-lg font-semibold text-center text-white border-2 border-white/30 rounded-full hover:bg-white/10 transition-all duration-300"
+                  className="w-full px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-center text-white border-2 border-white/30 rounded-full hover:bg-white/10 transition-all duration-300"
                 >
                   Help Me Choose
                 </button>

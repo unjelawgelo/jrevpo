@@ -41,19 +41,21 @@ const ministries = [
     color: "from-purple-500 to-pink-500",
     media: [
       { type: 'image', src: "/ministries/worship/DSC00059.jpg" },
-      { type: 'image', src: "/ministries/worship/DSC00131.jpg" },
-      { type: 'image', src: "/ministries/worship/DSC00143.jpg" },
-      { type: 'image', src: "/ministries/worship/DSC01285.jpg" },
-      { type: 'image', src: "/ministries/worship/IMG_0082 (1).jpg" },
-      { type: 'image', src: "/ministries/worship/IMG_0209.JPG" },
-      { type: 'image', src: "/ministries/worship/IMG_0279.JPG" },
+      // { type: 'image', src: "/ministries/worship/DSC00059.jpg" },
+      // { type: 'image', src: "/ministries/worship/DSC00131.jpg" },
+      // { type: 'image', src: "/ministries/worship/DSC00143.jpg" },
       { type: 'image', src: "/ministries/worship/IMG_0296.jpg" },
-      { type: 'image', src: "/ministries/worship/IMG_0325.JPG" },
+      { type: 'image', src: "/ministries/worship/IMG_0209.JPG" },
+      { type: 'image', src: "/ministries/worship/IMG_1132.JPG" },
+      { type: 'image', src: "/ministries/worship/IMG_0279.JPG" },
+      // { type: 'image', src: "/ministries/worship/IMG_0325.JPG" },
+      { type: 'image', src: "/ministries/worship/IMG_8906.jpg" },
       { type: 'image', src: "/ministries/worship/IMG_0592.jpg" },
       { type: 'image', src: "/ministries/worship/IMG_0616.jpg" },
+      { type: 'image', src: "/ministries/worship/DSC01285.jpg" },
+      { type: 'image', src: "/ministries/worship/IMG_0082 (1).jpg" },
       { type: 'image', src: "/ministries/worship/IMG_0722.jpg" },
-      { type: 'image', src: "/ministries/worship/IMG_1132.JPG" },
-      { type: 'image', src: "/ministries/worship/IMG_8906.jpg" }
+
     ],
     stats: { members: "45+", events: "120+" },
     highlights: ["Live Worship", "Recording Studio", "Music Training", "Songwriting"],
@@ -142,10 +144,10 @@ const ministries = [
     media: [
       { type: 'image', src: "/ministries/comms&creatives/IMG_0408.JPG" },
       { type: 'image', src: "/ministries/comms&creatives/IMG_0433.JPG" },
+      { type: 'image', src: "/ministries/comms&creatives/IMG_0408.JPG" },
       { type: 'image', src: "/ministries/comms&creatives/IMG_0456.JPG" },
       { type: 'image', src: "/ministries/comms&creatives/IMG_2388.JPG" },
-      { type: 'image', src: "/ministries/comms&creatives/IMG_9768.JPG" },
-      { type: 'image', src: "/ministries/comms&creatives/kandrei.JPG" }
+      { type: 'image', src: "/ministries/comms&creatives/IMG_9768.JPG" }
     ],
     stats: { members: "30+", posts: "1000+" },
     highlights: ["Social Media", "Graphic Design", "Photography", "Content Strategy"],

@@ -1549,14 +1549,14 @@ const MinistrySection = ({ ministry, index }: { ministry: any; index: number }) 
                 <TestimonialCarousel testimonials={ministry.testimonials} ministry={ministry} />
               </motion.div>
 
-              {/* <Button
+              <Button
                 onClick={() => setJoinFlowOpen(true)}
                 size="lg"
                 className={`bg-gradient-to-r ${ministry.color} hover:shadow-2xl transition-all duration-300 text-white font-semibold py-4 px-8 rounded-2xl transform hover:scale-105`}
               >
                 Join {ministry.name}
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button> */}
+              </Button> 
             </div>
           </motion.div>
 
